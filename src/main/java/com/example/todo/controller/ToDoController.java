@@ -40,13 +40,13 @@ public class ToDoController {
      * 指定されたIDの「すること」の詳細を表示します。
      */
     @GetMapping("/{id}")
-    public String detail(@PathVariable Integer id, Model model,
+    public String detail(@PathVariable("id") Integer id, Model model,
             RedirectAttributes attributes) {
         // 「すること」IDに対応する「すること」情報を取得
-        ToDo ToDo = toDoService.findByIdToDo(id);
-        if (ToDo != null) {
+        ToDo toDo = toDoService.findByIdToDo(id);
+        if (toDo != null) {
             // 対象データがある場合はモデルに格納
-            model.addAttribute("todo", toDoService.findByIdToDo(id));
+            model.addAttribute("todo", toDo);
             return "todo/detail";
         } else {
             // 対象データがない場合はフラッシュメッセージを設定
@@ -87,6 +87,8 @@ public class ToDoController {
         todo.setId(toDoForm.getId());
         todo.setTodo(toDoForm.getTodo());
         todo.setDetail(toDoForm.getDetail());
+        todo.setPriority(toDoForm.getPriority());
+        todo.setCompleted(toDoForm.getCompleted());
         // 登録実行
         toDoService.insertToDo(todo);
         // フラッシュメッセージ
@@ -100,7 +102,7 @@ public class ToDoController {
      * 指定されたIDの修正画面を表示します。
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model,
+    public String edit(@PathVariable("id") Integer id, Model model,
             RedirectAttributes attributes) {
         // IDに対応する「すること」を取得
         ToDo target = toDoService.findByIdToDo(id);
@@ -110,6 +112,8 @@ public class ToDoController {
             form.setId(target.getId());
             form.setTodo(target.getTodo());
             form.setDetail(target.getDetail());
+            form.setPriority(target.getPriority());
+            form.setCompleted(target.getCompleted());
             // 更新画面設定
             form.setIsNew(false);
             // モデルに格納
@@ -143,6 +147,8 @@ public class ToDoController {
         todo.setId(toDoForm.getId());
         todo.setTodo(toDoForm.getTodo());
         todo.setDetail(toDoForm.getDetail());
+        todo.setPriority(toDoForm.getPriority());
+        todo.setCompleted(toDoForm.getCompleted());
         // 更新処理
         toDoService.updateToDo(todo);
         // フラッシュメッセージ

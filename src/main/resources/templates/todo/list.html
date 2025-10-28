@@ -19,6 +19,8 @@
                 <th>ID</th>
                 <th>ToDo</th>
                 <th>詳細</th>
+				<th>優先度</th>
+				<th>完了</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +32,12 @@
                         詳細
                     </a>
                 </td>
+				<td>
+					<span th:if="${todo.priority == 1}">高</span>
+					<span th:if="${todo.priority == 2}">中</span>
+					<span th:if="${todo.priority == 3}">低</span>	
+				</td>
+				<td th:text="${todo.completed} ? '完了' : '未完了'"></td>
             </tr>
         </tbody>
     </table>

@@ -2,6 +2,7 @@ package com.example.todo.form;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class ToDoForm {
     /** すること詳細 */
     @Size(min = 1, max = 100, message = "詳細は{min}〜{max}文字以内で入力してください。")
     private String detail;
+    private Boolean completed; // 完了フラグ
+    private Integer priority;  // ← 追加（数値型）
     /** 新規判定 */
     private Boolean isNew;
 }

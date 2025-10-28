@@ -19,6 +19,8 @@ public class ToDo {
     private String todo;
     /** すること詳細 */
     private String detail;
+    private Boolean completed;
+    private Integer priority;  // ← 追加（数値型）
     /** 作成日時 */
     private LocalDateTime createdAt;
     /** 更新日時 */

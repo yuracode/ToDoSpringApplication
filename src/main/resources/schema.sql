@@ -11,6 +11,8 @@ CREATE TABLE todos (
     todo varchar(255) NOT NULL,
     -- detail（説明）
     detail text,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    priority INT NOT NULL DEFAULT 2,
     -- created_at（作成日）
     created_at timestamp without time zone,
     -- updated_at（更新日）
