@@ -44,6 +44,11 @@
 		    <option value="2" selected>中</option>
 		    <option value="3">低</option>
 		</select>
+<!--		<select th:field="*{priority}" required>-->
+<!--		    <option value="1">高</option>-->
+<!--		    <option value="2">中</option>-->
+<!--		    <option value="3">低</option>-->
+<!--		</select>-->
 		<input type="checkbox" th:field="*{completed}" value="true">完了
         <!-- ボタン：登録 or 編集 -->
         <input th:if="${toDoForm.isNew}" type="submit" value="登録">
