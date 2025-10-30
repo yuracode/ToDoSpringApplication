@@ -178,56 +178,63 @@ public class ToDo {
 #### 4. 一覧画面にフィルター追加
 ```html
 <!-- list.html -->
-<form th:action="@{/todo/list}" method="get">
-    <label>カテゴリで絞り込み：</label>
-    <select name="category">
-        <option value="">全て</option>
-        <option value="仕事">仕事</option>
-        <option value="プライベート">プライベート</option>
-        <option value="勉強">勉強</option>
-    </select>
-    <button type="submit">絞り込み</button>
-</form>
+	<form th:action="@{/todos/list}" method="get">
+	    <label for="category">カテゴリで絞り込み：</label>
+	    <select id="category" name="category">
+	        <option value=""
+	            th:selected="${category == null or category == ''}">全て</option>
+	        <option value="仕事"
+	            th:selected="${category == '仕事'}">仕事</option>
+	        <option value="プライベート"
+	            th:selected="${category == 'プライベート'}">プライベート</option>
+	        <option value="勉強"
+	            th:selected="${category == '勉強'}">勉強</option>
+	    </select>
+	    <button type="submit">絞り込み</button>
+	</form>
 ```
 
 #### 5. Controllerの修正
 ```java
-@GetMapping("/list")
-public String list(@RequestParam(required = false) String category, Model model) {
-    List<ToDo> toDoList;
-    
-    if (category != null && !category.isEmpty()) {
-        // カテゴリ指定あり
-        toDoList = toDoService.findByCategory(category);
-    } else {
-        // 全て表示
-        toDoList = toDoService.findAllToDo();
-    }
-    
-    model.addAttribute("toDoList", toDoList);
-    return "todo/list";
-}
+     /**
+     * 「すること」の一覧をカテゴリーで絞り込んで表示します。
+     */
+	@GetMapping("/list")
+	public String list(@RequestParam(required = false) String category,Model model) {
+		if(category.isEmpty()) {
+			return "redirect:/todos";
+		}
+		model.addAttribute("category", category);
+		model.addAttribute("todos", toDoService.findByCategory(category));
+		return "todo/list";
+	}
 ```
 
 #### 6. Service、Mapper、XMLの追加
 ```java
 // ToDoService.java
-public List<ToDo> findByCategory(String category) {
-    return toDoMapper.selectByCategory(category);
-}
+    /**
+	 * 指定されたカテゴリーの「すること」を検索します。
+	 */
+    public List<ToDo> findByCategory(String category) {
+		// Mapperにカテゴリーを渡して検索を実行
+		return toDoMapper.selectByCategory(category);
+	}
 
 // ToDoMapper.java
-List<ToDo> selectByCategory(@Param("category") String category);
+    /** 
+     * 指定されたカテゴリーに対応する「すること」を取得します。
+     */
+    List<ToDo> selectByCategory(@Param("category") String category);
 ```
 
 ```xml
 <!-- ToDoMapper.xml -->
-<select id="selectByCategory" resultType="com.example.webapp.entity.ToDo">
-    SELECT id, title, completed, priority, category
-    FROM todos
-    WHERE category = #{category}
-    ORDER BY id DESC
-</select>
+	<!-- カテゴリー検索 -->
+	<select id="selectByCategory" resultType="com.example.todo.entity.ToDo">
+    SELECT id, todo, detail, completed, priority, category,
+		created_at ,updated_at FROM todos WHERE category = #{category}
+	</select>
 ```
 
 **実装のヒント**
@@ -267,23 +274,27 @@ LIKE句を使った部分一致検索、入力フォームからのパラメー�
 ```java
 @GetMapping("/list")
 public String list(
-    @RequestParam(required = false) String keyword,
-    @RequestParam(required = false) String category,
-    Model model) {
-    
-    List<ToDo> toDoList;
-    
-    // キーワードとカテゴリの両方に対応
-    if (keyword != null && !keyword.isEmpty()) {
-        toDoList = toDoService.searchByTitle(keyword);
-    } else if (category != null && !category.isEmpty()) {
-        toDoList = toDoService.findByCategory(category);
-    } else {
-        toDoList = toDoService.findAllToDo();
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) String category,
+        Model model) {
+
+    // 両方空ならリダイレクト
+    if ((keyword == null || keyword.isEmpty()) &&
+        (category == null || category.isEmpty())) {
+        return "redirect:/todos";
     }
-    
-    model.addAttribute("toDoList", toDoList);
-    model.addAttribute("keyword", keyword);  // 検索後も表示
+
+    List<ToDo> todos;
+
+    if (keyword != null && !keyword.isEmpty()) {
+        todos = toDoService.searchByTitle(keyword);
+    } else {
+        todos = toDoService.findByCategory(category);
+    }
+
+    model.addAttribute("todos", todos);
+    model.addAttribute("keyword", keyword);
+    model.addAttribute("category", category);
     return "todo/list";
 }
 ```
