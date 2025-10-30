@@ -21,6 +21,7 @@ public class ToDo {
     private String detail;
     private Boolean completed;
     private Integer priority;  // ← 追加（数値型）
+    private String category; // ← 追加（カテゴリー）
     /** 作成日時 */
     private LocalDateTime createdAt;
     /** 更新日時 */

@@ -13,6 +13,8 @@ CREATE TABLE todos (
     detail text,
     completed BOOLEAN NOT NULL DEFAULT FALSE,
     priority INT NOT NULL DEFAULT 2,
+    
+    category varchar(100) NOT NULL DEFAULT 'プライベート',
     -- created_at（作成日）
     created_at timestamp without time zone,
     -- updated_at（更新日）

@@ -4,56 +4,85 @@
     <title>ToDoフォーム</title>
 </head>
 <body>
+
     <!-- タイトル：登録 or 編集 -->
     <h2 th:if="${toDoForm.isNew}">新規ToDo登録</h2>
     <h2 th:unless="${toDoForm.isNew}">ToDo編集</h2>
+
     <!-- アクション：登録 or 編集 -->
     <form th:action="${toDoForm.isNew} ? @{/todos/save} : @{/todos/update}"
-        th:object="${toDoForm}" method="post">
-        <!-- idは更新時に必要のため、hiddenで持つ -->
+          th:object="${toDoForm}" method="post">
+
+        <!-- idは更新時に必要（非表示） -->
         <input type="hidden" th:field="*{id}">
-        <!-- ▽▽▽▽▽ 14.4 ▽▽▽▽▽ -->
-	    <table>
-	        <tr>
-	            <th>ToDo</th>
-	            <td>
-	                <input type="text" th:field="*{todo}">
-	                <!-- todo用：バリデーションエラー表示 -->
-	                <span th:if="${#fields.hasErrors('todo')}" 
-	                    th:errors="*{todo}" style="color: red;">
-	                    エラーがあれば表示
-	                </span>
-	            </td>
-	        </tr>
-	        <tr>
-	            <th>詳細</th>
-	            <td>
-	                <textarea rows="5" cols="30" th:field="*{detail}">
-	                </textarea>
-	                <!-- 詳細用：バリデーションエラー表示 -->
-	                <span th:if="${#fields.hasErrors('detail')}" 
-	                    th:errors="*{detail}" style="color: red;">
-	                    エラーがあれば表示
-	                </span>
-	            </td>
-	        </tr>
-	    </table>
-		<label>優先度：</label>
-		<select name="priority" required>
-		    <option value="1">高</option>
-		    <option value="2" selected>中</option>
-		    <option value="3">低</option>
-		</select>
-<!--		<select th:field="*{priority}" required>-->
-<!--		    <option value="1">高</option>-->
-<!--		    <option value="2">中</option>-->
-<!--		    <option value="3">低</option>-->
-<!--		</select>-->
-		<input type="checkbox" th:field="*{completed}" value="true">完了
+
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th>ToDo</th>
+                <td>
+                    <input type="text" th:field="*{todo}" size="40">
+                    <br>
+                    <span th:if="${#fields.hasErrors('todo')}"
+                          th:errors="*{todo}" style="color:red;">
+                        エラーがあれば表示
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>詳細</th>
+                <td>
+                    <textarea rows="5" cols="40" th:field="*{detail}"></textarea>
+                    <br>
+                    <span th:if="${#fields.hasErrors('detail')}"
+                          th:errors="*{detail}" style="color:red;">
+                        エラーがあれば表示
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>優先度</th>
+                <td>
+                    <select th:field="*{priority}" required>
+                        <option value="1">高</option>
+                        <option value="2">中</option>
+                        <option value="3">低</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>カテゴリー</th>
+                <td>
+                    <select th:field="*{category}" required>
+                        <option value="" disabled>-- 選択してください --</option>
+                        <option th:value="'仕事'" th:text="'仕事'"></option>
+                        <option th:value="'プライベート'" th:text="'プライベート'"></option>
+                        <option th:value="'勉強'" th:text="'勉強'"></option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>完了状態</th>
+                <td>
+                    <label>
+                        <input type="checkbox" th:field="*{completed}" value="true">
+                        完了
+                    </label>
+                </td>
+            </tr>
+        </table>
+
+        <br>
+
         <!-- ボタン：登録 or 編集 -->
         <input th:if="${toDoForm.isNew}" type="submit" value="登録">
         <input th:unless="${toDoForm.isNew}" type="submit" value="更新">
+        <a th:href="@{/todos}">戻る</a>
+
     </form>
-    <a th:href="@{/todos}">戻る</a>
+
 </body>
 </html>

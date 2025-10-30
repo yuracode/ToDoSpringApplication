@@ -89,6 +89,7 @@ public class ToDoController {
         todo.setDetail(toDoForm.getDetail());
         todo.setPriority(toDoForm.getPriority());
         todo.setCompleted(toDoForm.getCompleted());
+        todo.setCategory(toDoForm.getCategory());
         // 登録実行
         toDoService.insertToDo(todo);
         // フラッシュメッセージ
@@ -114,6 +115,7 @@ public class ToDoController {
             form.setDetail(target.getDetail());
             form.setPriority(target.getPriority());
             form.setCompleted(target.getCompleted());
+            form.setCategory(target.getCategory());
             // 更新画面設定
             form.setIsNew(false);
             // モデルに格納
@@ -149,6 +151,7 @@ public class ToDoController {
         todo.setDetail(toDoForm.getDetail());
         todo.setPriority(toDoForm.getPriority());
         todo.setCompleted(toDoForm.getCompleted());
+        todo.setCategory(toDoForm.getCategory());
         // 更新処理
         toDoService.updateToDo(todo);
         // フラッシュメッセージ

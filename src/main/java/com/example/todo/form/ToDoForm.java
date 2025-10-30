@@ -24,6 +24,7 @@ public class ToDoForm {
     private String detail;
     private Boolean completed; // 完了フラグ
     private Integer priority;  // ← 追加（数値型）
+    private String category; // ← 追加（カテゴリー）
     /** 新規判定 */
     private Boolean isNew;
 }
